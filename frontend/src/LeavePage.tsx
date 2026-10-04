@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./api";
 
 type Leave = {
   id?: number;
@@ -27,7 +27,7 @@ function LeavePage() {
 
   const loadLeaves = async () => {
     try {
-      const response = await axios.get("/api/leaves");
+      const response = await api.get("/leaves");
       setRecords(response.data);
     } catch (error) {
       console.error(error);
@@ -40,7 +40,7 @@ function LeavePage() {
 
   const submitLeave = async () => {
     try {
-      await axios.post("/api/leaves", form);
+      await api.post("/leaves", form);
 
       setMessage("Leave request submitted successfully.");
 
@@ -62,7 +62,7 @@ function LeavePage() {
 
   const updateStatus = async (id: number, status: string) => {
     try {
-      await axios.put(
+      await api.put(
         `/api/leaves/${id}/status?status=${status}`
       );
 

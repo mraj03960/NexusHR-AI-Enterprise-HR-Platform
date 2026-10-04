@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./api";
 
 function DashboardPage() {
   const [employees, setEmployees] = useState<any[]>([]);
@@ -11,10 +11,10 @@ function DashboardPage() {
     try {
       const [employeesRes, attendanceRes, leavesRes, payrollRes] =
         await Promise.all([
-          axios.get("/api/employees"),
-          axios.get("/api/attendance"),
-          axios.get("/api/leaves"),
-          axios.get("/api/payroll")
+          api.get("/employees"),
+          api.get("/attendance"),
+          api.get("/leaves"),
+          api.get("/payroll")
         ]);
 
       setEmployees(employeesRes.data);

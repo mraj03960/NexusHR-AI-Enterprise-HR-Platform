@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./api";
 import "./index.css";
 import AttendancePage from "./AttendancePage";
 import LeavePage from "./LeavePage";
 import PayrollPage from "./PayrollPage";
 import DashboardPage from "./DashboardPage";
 
-const api = axios.create({
-  baseURL: "/api"
-});
+
 
 type Employee = {
   id?: number;
@@ -32,12 +30,16 @@ function App() {
     localStorage.getItem("username") || ""
   );
 
+  const [role, setRole] = useState(
+  localStorage.getItem("role") || ""
+);
+
   const [page, setPage] = useState("dashboard");
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [message, setMessage] = useState("");
 
   const [loginUsername, setLoginUsername] = useState("admin");
-  const [loginPassword, setLoginPassword] = useState("Admin@123");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
 
   const [form, setForm] = useState<Employee>({
@@ -77,9 +79,11 @@ function App() {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
+      localStorage.setItem("role", response.data.role);
 
       setToken(response.data.token);
       setUsername(response.data.username);
+      setRole(response.data.role);
     } catch {
       setLoginError("Invalid username or password");
     }
@@ -89,6 +93,7 @@ function App() {
     localStorage.clear();
     setToken(null);
     setUsername("");
+    setRole("");
   };
 
   const createEmployee = async () => {
@@ -210,7 +215,7 @@ function App() {
             <p>Welcome back, {username}</p>
           </div>
 
-          <div className="user-badge">ADMIN</div>
+          <div className="user-badge">{role}</div>
         </header>
 
         {page === "dashboard" && <DashboardPage />}
@@ -361,9 +366,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./api";
 
 type Payroll = {
   id?: number;
@@ -27,7 +27,7 @@ function PayrollPage() {
 
   const loadPayroll = async () => {
     try {
-      const response = await axios.get("/api/payroll");
+      const response = await api.get("/payroll");
       setRecords(response.data);
     } catch (error) {
       console.error(error);
@@ -40,7 +40,7 @@ function PayrollPage() {
 
   const processPayroll = async () => {
     try {
-      await axios.post("/api/payroll", form);
+      await api.post("/payroll", form);
 
       setMessage("Payroll processed successfully.");
 
