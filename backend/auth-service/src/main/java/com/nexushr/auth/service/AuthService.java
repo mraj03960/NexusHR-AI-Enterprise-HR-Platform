@@ -20,10 +20,13 @@ public class AuthService {
 
     public User register(User user) {
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    // Public registration should never create privileged accounts
+    user.setRole("EMPLOYEE");
 
-        return userRepository.save(user);
-    }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+    return userRepository.save(user);
+}
 
     public User findByUsername(String username) {
 

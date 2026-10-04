@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./api";
 
 type Attendance = {
   id?: number;
@@ -25,7 +25,7 @@ function AttendancePage() {
 
   const loadAttendance = async () => {
     try {
-      const response = await axios.get("/api/attendance");
+      const response = await api.get("/attendance");
       setRecords(response.data);
     } catch (error) {
       console.error(error);
@@ -38,7 +38,7 @@ function AttendancePage() {
 
   const markAttendance = async () => {
     try {
-      await axios.post("/api/attendance", form);
+      await api.post("/attendance", form);
 
       setMessage("Attendance marked successfully.");
 
