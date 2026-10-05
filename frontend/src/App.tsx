@@ -34,6 +34,21 @@ function App() {
   localStorage.getItem("role") || ""
 );
 
+  const normalizedRole = role.toUpperCase();
+
+  const canManageEmployees =
+    normalizedRole === "ADMIN" ||
+    normalizedRole === "HR";
+
+  const canViewEmployees =
+    normalizedRole === "ADMIN" ||
+    normalizedRole === "HR" ||
+    normalizedRole === "MANAGER";
+
+  const canViewPayroll =
+    normalizedRole === "ADMIN" ||
+    normalizedRole === "HR" ||
+    normalizedRole === "MANAGER";
   const [page, setPage] = useState("dashboard");
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [message, setMessage] = useState("");
@@ -167,12 +182,16 @@ function App() {
           🏠 Dashboard
         </button>
 
+        {canViewEmployees && (
+
         <button
           className={page === "employees" ? "nav active" : "nav"}
           onClick={() => setPage("employees")}
         >
           👥 Employees
         </button>
+
+        )}
 
         <button
           className={page === "attendance" ? "nav active" : "nav"}
@@ -188,12 +207,28 @@ function App() {
           📅 Leave
         </button>
 
-        <button
-          className={page === "payroll" ? "nav active" : "nav"}
-          onClick={() => setPage("payroll")}
-        >
-          💰 Payroll
-        </button>
+        {canViewPayroll && (
+
+
+          <button
+
+
+            className={page === "payroll" ? "nav active" : "nav"}
+
+
+            onClick={() => setPage("payroll")}
+
+
+          >
+
+
+            💰 Payroll
+
+
+          </button>
+
+
+        )}
 
         <button className="logout" onClick={logout}>
           Logout
@@ -220,91 +255,31 @@ function App() {
 
         {page === "dashboard" && <DashboardPage />}
 
-        {page === "employees" && (
+        {page === "employees" && canViewEmployees && (
           <>
+            {canManageEmployees && (
             <section className="panel">
-              <h2>Add Employee</h2>
+            <h2>Add Employee</h2>
 
-              <div className="form-grid">
-
-                <input
-                  placeholder="Employee Code"
-                  value={form.employeeCode}
-                  onChange={(e) =>
-                    setForm({ ...form, employeeCode: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="First Name"
-                  value={form.firstName}
-                  onChange={(e) =>
-                    setForm({ ...form, firstName: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="Last Name"
-                  value={form.lastName}
-                  onChange={(e) =>
-                    setForm({ ...form, lastName: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="Email"
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="Department"
-                  value={form.department}
-                  onChange={(e) =>
-                    setForm({ ...form, department: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="Designation"
-                  value={form.designation}
-                  onChange={(e) =>
-                    setForm({ ...form, designation: e.target.value })
-                  }
-                />
-
-                <input
-                  type="date"
-                  value={form.joiningDate}
-                  onChange={(e) =>
-                    setForm({ ...form, joiningDate: e.target.value })
-                  }
-                />
-
-                <select
-                  value={form.employmentStatus}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      employmentStatus: e.target.value
-                    })
-                  }
-                >
-                  <option value="ACTIVE">ACTIVE</option>
-                  <option value="INACTIVE">INACTIVE</option>
-                </select>
-
-              </div>
-
-              <button className="primary add-button" onClick={createEmployee}>
-                Add Employee
-              </button>
-
-              {message && <p className="success">{message}</p>}
-            </section>
-
+                          <div className="form-grid">
+                            <input placeholder="Employee Code" value={form.employeeCode} onChange={(e) => setForm({ ...form, employeeCode: e.target.value })} />
+                            <input placeholder="First Name" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
+                            <input placeholder="Last Name" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
+                            <input placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                            <input placeholder="Department" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} />
+                            <input placeholder="Designation" value={form.designation} onChange={(e) => setForm({ ...form, designation: e.target.value })} />
+                            <input type="date" value={form.joiningDate} onChange={(e) => setForm({ ...form, joiningDate: e.target.value })} />
+                            <select value={form.employmentStatus} onChange={(e) => setForm({ ...form, employmentStatus: e.target.value })}>
+                              <option value="ACTIVE">ACTIVE</option>
+                              <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                          </div>
+                          <button className="primary add-button" onClick={createEmployee}>
+                            Add Employee
+                          </button>
+                          {message && <p className="success">{message}</p>}
+                        </section>
+                      )}
             <section className="panel">
               <div className="panel-title">
                 <h2>Employees</h2>
