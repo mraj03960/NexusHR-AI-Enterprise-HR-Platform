@@ -4,7 +4,9 @@ import "./index.css";
 import AttendancePage from "./AttendancePage";
 import LeavePage from "./LeavePage";
 import PayrollPage from "./PayrollPage";
+import PerformancePage from "./PerformancePage";
 import DashboardPage from "./DashboardPage";
+import InsightsPage from "./InsightsPage";
 
 
 
@@ -207,6 +209,12 @@ function App() {
           📅 Leave
         </button>
 
+        <button
+          className={page === "performance" ? "nav active" : "nav"}
+          onClick={() => setPage("performance")}
+        >
+          📈 Performance
+        </button>
         {canViewPayroll && (
 
 
@@ -254,6 +262,8 @@ function App() {
         </header>
 
         {page === "dashboard" && <DashboardPage />}
+
+        {page === "insights" && <InsightsPage />}
 
         {page === "employees" && canViewEmployees && (
           <>
@@ -335,9 +345,15 @@ function App() {
 
         {page === "payroll" && <PayrollPage />}
 
+        {page === "performance" && <PerformancePage />}
+
       </main>
     </div>
   );
 }
 
 export default App;
+
+
+
+
