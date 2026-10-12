@@ -1,0 +1,78 @@
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: nexushr-postgres
+    environment:
+      POSTGRES_DB: nexushr
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: nexushr-redis
+    ports:
+      - "6379:6379"
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.auth
+    container_name: nexushr-auth
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nexushr
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  employee-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexushr-employee
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nexushr
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - redis
+
+  payroll-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.payroll
+    container_name: nexushr-payroll
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nexushr
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: nexushr-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - auth-service
+      - employee-service
+      - payroll-service
+
+volumes:
+  postgres_data:

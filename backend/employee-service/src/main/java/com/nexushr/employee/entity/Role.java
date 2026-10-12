@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,3 +48,4 @@ public class Role {
         this.description = description;
     }
 }
+

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payroll-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payroll-service
+  template:
+    metadata:
+      labels:
+        app: payroll-service
+    spec:
+      containers:
+        - name: payroll-service
+          image: nexushr-ai-enterprise-hr-platform-payroll-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nexushr-secrets
+                  key: db-password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nexushr-secrets
+                  key: jwt-secret
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/nexushr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payroll-service
+spec:
+  selector:
+    app: payroll-service
+  ports:
+    - port: 8083
+      targetPort: 8083
+

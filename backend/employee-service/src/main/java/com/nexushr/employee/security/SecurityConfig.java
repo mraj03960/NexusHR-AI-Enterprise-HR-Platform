@@ -78,6 +78,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/roles/**")
                 .hasRole("ADMIN")
 
+                // Performance management
+                .requestMatchers(HttpMethod.GET, "/api/performance/**")
+                .hasAnyRole("ADMIN", "HR", "MANAGER", "EMPLOYEE")
+
+                .requestMatchers(HttpMethod.POST, "/api/performance/**")
+                .hasAnyRole("ADMIN", "HR", "MANAGER")
+
+                .requestMatchers(HttpMethod.PUT, "/api/performance/**")
+                .hasAnyRole("ADMIN", "HR", "MANAGER")
                 .anyRequest().authenticated()
             )
 

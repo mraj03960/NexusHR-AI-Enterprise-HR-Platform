@@ -4,6 +4,8 @@ import com.nexushr.employee.entity.Employee;
 import com.nexushr.employee.entity.Role;
 import com.nexushr.employee.repository.EmployeeRepository;
 import com.nexushr.employee.repository.RoleRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class EmployeeService {
         this.roleRepository = roleRepository;
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     public Employee createEmployee(Employee employee) {
 
         if (employee.getRole() != null && employee.getRole().getId() != null) {
@@ -35,6 +38,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    @Cacheable("employees")
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
@@ -47,6 +51,7 @@ public class EmployeeService {
         return employeeRepository.findByEmail(email);
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     public Employee updateEmployee(Employee employee) {
 
         if (employee.getRole() != null && employee.getRole().getId() != null) {
@@ -60,6 +65,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     public void deleteEmployee(Long id) {
         employeeRepository.deleteById(id);
     }

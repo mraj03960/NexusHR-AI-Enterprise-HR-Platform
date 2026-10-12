@@ -5,9 +5,12 @@ import AttendancePage from "./AttendancePage";
 import LeavePage from "./LeavePage";
 import PayrollPage from "./PayrollPage";
 import PerformancePage from "./PerformancePage";
+import PerformanceTrendPage from "./PerformanceTrendPage";
 import DashboardPage from "./DashboardPage";
 import InsightsPage from "./InsightsPage";
-
+import NotificationPanel from "./NotificationPanel";
+import AdminAnalyticsPage from "./AdminAnalyticsPage";
+import SkillGapPage from "./SkillGapPage";
 
 
 type Employee = {
@@ -238,6 +241,14 @@ function App() {
 
         )}
 
+        {role.toUpperCase() === "ADMIN" && (
+          <button
+            className={page === "analytics" ? "nav active" : "nav"}
+            onClick={() => setPage("analytics")}
+          >
+            📊 Workforce Analytics
+          </button>
+        )}
         <button className="logout" onClick={logout}>
           Logout
         </button>
@@ -264,6 +275,10 @@ function App() {
         {page === "dashboard" && <DashboardPage />}
 
         {page === "insights" && <InsightsPage />}
+
+        {page === "dashboard" && <NotificationPanel />}
+
+        {role.toUpperCase() === "ADMIN" && page === "analytics" && <AdminAnalyticsPage />}
 
         {page === "employees" && canViewEmployees && (
           <>
@@ -347,13 +362,18 @@ function App() {
 
         {page === "performance" && <PerformancePage />}
 
+        {page === "performance-trend" && <PerformanceTrendPage />}
+
+        {page === "skill-gap" && <SkillGapPage />}
+
+        {page === "performance-trend" && <PerformanceTrendPage />}
+
       </main>
     </div>
   );
 }
 
 export default App;
-
 
 
 

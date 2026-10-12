@@ -10,7 +10,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -27,7 +29,7 @@ button {
 }
 
 .login-card {
-  width: 390px;
+  width: min(390px, calc(100% - 32px));
   padding: 42px;
   background: white;
   border-radius: 18px;
@@ -82,6 +84,16 @@ button {
   background: #315efb;
   color: white;
   font-weight: 700;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.primary:hover:not(:disabled) {
+  background: #244ce0;
+}
+
+.primary:disabled {
+  cursor: wait;
+  opacity: .65;
 }
 
 .login-card small {
@@ -102,6 +114,7 @@ button {
 
 .sidebar {
   width: 240px;
+  min-width: 240px;
   min-height: 100vh;
   padding: 22px 16px;
   background: #101828;
@@ -147,6 +160,7 @@ button {
 
 .content {
   flex: 1;
+  min-width: 0;
   padding: 30px 38px;
   overflow-x: auto;
 }
@@ -155,6 +169,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   margin-bottom: 28px;
 }
 
@@ -177,7 +192,7 @@ header p {
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 25px;
 }
@@ -206,16 +221,25 @@ header p {
 }
 
 .panel {
+  min-width: 0;
+  margin-bottom: 18px;
   padding: 24px;
   background: white;
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(16, 24, 40, .06);
 }
 
+.panel > h2 {
+  margin: 0 0 18px;
+  font-size: 25px;
+  line-height: 1.3;
+}
+
 .panel-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 18px;
 }
 
@@ -237,15 +261,16 @@ td {
   padding: 13px 10px;
   text-align: left;
   border-bottom: 1px solid #eaecf0;
-  white-space: nowrap;
 }
 
 th {
   color: #667085;
   font-size: 13px;
+  font-weight: 700;
 }
 
 .status {
+  display: inline-block;
   padding: 5px 9px;
   border-radius: 15px;
   background: #ecfdf3;
@@ -254,32 +279,58 @@ th {
   font-weight: 700;
 }
 
-@media (max-width: 900px) {
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sidebar {
-    width: 190px;
-  }
-}
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin: 20px 0;
 }
 
 .form-grid input,
-.form-grid select {
-  padding: 12px;
-  border: 1px solid #d0d5dd;
-  border-radius: 8px;
-  background: white;
+.form-grid select,
+.form-grid textarea,
+.panel input,
+.panel select,
+.panel textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid #cfd6e4;
+  border-radius: 9px;
+  background: #fff;
+  color: #172033;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus,
+.panel input:focus,
+.panel select:focus,
+.panel textarea:focus {
+  border-color: #315efb;
+  box-shadow: 0 0 0 3px rgba(49, 94, 251, .12);
+}
+
+.panel label {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.panel label .employee-id-input {
+  width: 180px;
 }
 
 .add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: auto;
+  min-width: 140px;
   padding: 12px 22px;
 }
 
@@ -289,11 +340,6 @@ th {
   margin-top: 15px;
 }
 
-@media (max-width: 700px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-}
 .action-button {
   border: 0;
   border-radius: 6px;
@@ -312,6 +358,7 @@ th {
   background: #fef3f2;
   color: #b42318;
 }
+
 .salary-preview {
   padding: 12px 16px;
   border-radius: 8px;
@@ -321,9 +368,10 @@ th {
   display: flex;
   align-items: center;
 }
+
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   margin-bottom: 20px;
 }
@@ -351,8 +399,170 @@ th {
   color: #667085;
 }
 
-@media (max-width: 900px) {
+/* Performance page: keep goal progress input, Save button and status separate. */
+.goal-progress-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+}
+
+.goal-progress-control input {
+  flex: 0 1 96px;
+  width: 96px;
+  min-width: 72px;
+  min-height: 40px;
+  padding: 8px 10px;
+}
+
+.goal-progress-control .primary {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 78px;
+  min-height: 40px;
+  padding: 9px 15px;
+  white-space: nowrap;
+}
+
+.table-responsive {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.performance-table {
+  width: 100%;
+  min-width: 650px;
+  table-layout: auto;
+}
+
+.performance-table th,
+.performance-table td {
+  vertical-align: middle;
+}
+
+.goals-table {
+  min-width: 820px;
+}
+
+.goals-table th:nth-child(1) {
+  width: 30%;
+}
+
+.goals-table th:nth-child(2),
+.goals-table th:nth-child(3) {
+  width: 14%;
+}
+
+.goals-table th:nth-child(4) {
+  width: 27%;
+}
+
+.goals-table th:nth-child(5) {
+  width: 15%;
+}
+
+.goals-table td:first-child {
+  white-space: normal;
+  min-width: 190px;
+}
+
+.goals-table td:nth-child(4) {
+  min-width: 220px;
+}
+
+.goals-table td:last-child {
+  white-space: nowrap;
+}
+
+.error-message {
+  padding: 12px 14px;
+  border: 1px solid #fecdca;
+  border-radius: 8px;
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.success-message {
+  padding: 12px 14px;
+  border: 1px solid #abefc6;
+  border-radius: 8px;
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+@media (max-width: 1100px) {
+  .content {
+    padding: 24px;
+  }
+
+  .cards,
   .dashboard-cards {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .goal-progress-control {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 190px;
+    min-width: 190px;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .brand {
+    margin-bottom: 18px;
+  }
+
+  .content {
+    padding: 18px 14px;
+  }
+
+  header {
+    align-items: flex-start;
+  }
+
+  .cards,
+  .dashboard-cards,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .panel > h2 {
+    font-size: 21px;
+  }
+
+  .panel label .employee-id-input {
+    width: 100%;
+  }
+
+  .goal-progress-control {
+    min-width: 210px;
   }
 }

@@ -25,3 +25,10 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local Docker image archives
+*.tar
+
+# Local backup files
+*.bak
+*.bak2
